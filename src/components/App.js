@@ -33,15 +33,16 @@ class Timer extends React.Component {
 
   handleKeyDown(event) {
     if (!this.startGame) return;
+    if (this.endGame) return;
 
     let newX = this.state.x;
     let newY = this.state.y;
 
-    // if (newX === 250 && newY === 250) {
-    //   this.stopTimer();
-    //   this.endGame = true;
-    //   return;
-    // }
+    if (newX === 250 && newY === 250) {
+      this.stopTimer();
+      this.endGame = true;
+      return;
+    }
     if (event.keyCode === 39) {
       newX += 5;
     } else if (event.keyCode === 37) {
