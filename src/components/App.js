@@ -4,21 +4,73 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { time: 0, x: 0, y: 0 };
+    this.startTimer = this.startTimer.bind(this);
+    this.timerId = null;
+    this.stopTimer = this.stopTimer.bind(this);
+    this.handleStart = this.handleStart.bind(this);
+    this.startGame = false;
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  startTimer() {
+    this.timerId = setInterval(() => {
+      let second = this.state.time;
+      this.setState({ time: second + 1 });
+    }, 1000);
+  }
+
+  stopTimer() {
+    clearInterval(this.timerId);
+  }
+
+  handleStart() {
+    this.startTimer();
+
+    this.startGame = true;
+  }
+
+  handleKeyDown(event) {
+    if (!this.startGame) return;
+
+    let newX = this.state.x;
+    let newY = this.state.y;
+
+    if (newX === 250 && newY === 250) {
+      this.stopTimer();
+      return;
+    }
+    if (event.keyCode === 39) {
+      newX += 5;
+    } else if (event.keyCode === 37) {
+      newX -= 5;
+    } else if (event.keyCode === 40) {
+      newY += 5;
+    } else if (event.keyCode === 38) {
+      newY -= 5;
+    }
+    this.setState({ x: newX, y: newY });
   }
   componentDidMount() {
-    
+    document.addEventListener("keydown", this.handleKeyDown);
   }
 
   componentWillUnmount() {
-    
+    document.removeEventListener("keydown", this.handleKeyDown);
   }
-
-
 
   render() {
     return (
- <>
-</>
+      <>
+        <div className="heading-timer">{this.state.time}</div>
+        <button className="start" onClick={this.handleStart}>
+          Start
+        </button>
+        <div
+          style={{ left: `${this.state.x}px`, top: `${this.state.y}px` }}
+          className="ball"
+        ></div>
+        <div className="hole"></div>
+      </>
     );
   }
 }
