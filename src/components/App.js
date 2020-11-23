@@ -10,6 +10,7 @@ class Timer extends React.Component {
     this.handleStart = this.handleStart.bind(this);
     this.startGame = false;
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.endGame = false;
   }
 
   startTimer() {
@@ -24,9 +25,10 @@ class Timer extends React.Component {
   }
 
   handleStart() {
-    this.startTimer();
-
+    if (this.endGame) return;
+    if (this.startGame) return;
     this.startGame = true;
+    this.startTimer();
   }
 
   handleKeyDown(event) {
@@ -37,6 +39,7 @@ class Timer extends React.Component {
 
     if (newX === 250 && newY === 250) {
       this.stopTimer();
+      this.endGame = true;
       return;
     }
     if (event.keyCode === 39) {
